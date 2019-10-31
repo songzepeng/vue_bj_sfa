@@ -13,6 +13,13 @@ export default new Vuex.Store({
     NoticeList: []
   },
   mutations: {
+    initShops(state, payload) {
+      state.Shops = payload;
+    },
+    appendShops(state, payload) {
+      state.Shops = _.uniqBy([state.Shops, ...payload], 'id');
+      state.Shops.push(...payload);
+    },
     initUser(state, payload) {
       state.LoginUser = payload;
     },

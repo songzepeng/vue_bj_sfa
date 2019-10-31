@@ -17,34 +17,36 @@
         <div class="shop-wrap">
           <ul class="shop-list">
             <li class="shop-item" v-for="item in shopsData" :key="item.id">
-              <div class="left-desc">
-                <div class="desc-hd">
-                  <h3 class="shop-name">
-                    {{ item.name }}
-                  </h3>
-                  <div class="shop-location">
-                    <i
-                      class="icon iconfont icon-location"
-                      style="font-size:46px"
-                    ></i>
-                    <span> &lt; {{ item.distance }}米</span>
+              <router-link class="shop-item-link" :to="`/visitshop/${item.id}`">
+                <div class="left-desc">
+                  <div class="desc-hd">
+                    <h3 class="shop-name">
+                      {{ item.name }}
+                    </h3>
+                    <div class="shop-location animated bounce">
+                      <i
+                        class=" icon iconfont icon-location"
+                        style="font-size:46px"
+                      ></i>
+                      <span class="mi"> &lt; {{ item.distance }} km</span>
+                    </div>
+                  </div>
+                  <div class="shop-id-wrap">
+                    <span class="shop-id">ID:{{ item.id }}</span>
+                    <span>创建时间:{{ item.subon | formatDtae }}</span>
+                  </div>
+                  <div class="boss-wrap">
+                    <span class="boss">{{ item.bossNmae }}</span>
+                    <span class="phone">
+                      <i class="icon iconfont icon-shouji"></i>
+                      {{ item.phone }}</span
+                    >
                   </div>
                 </div>
-                <div class="shop-id-wrap">
-                  <span class="shop-id">ID:{{ item.id }}</span>
-                  <span>创建时间:{{ item.subon | formatDtae }}</span>
+                <div class="go-gt-btn">
+                  <i class="icon iconfont icon-youjiantou"></i>
                 </div>
-                <div class="boss-wrap">
-                  <span class="boss">{{ item.bossNmae }}</span>
-                  <span class="phone">
-                    <i class="icon iconfont icon-shouji"></i>
-                    {{ item.phone }}</span
-                  >
-                </div>
-              </div>
-              <div class="go-gt-btn">
-                <i class="icon iconfont icon-youjiantou"></i>
-              </div>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -60,6 +62,7 @@
 import TopHead from '../components/TopHead';
 import MTab from '../components/MTab';
 import Servive from '../service/index';
+import { Indicator } from 'mint-ui';
 export default {
   name: 'VisitShop',
   data() {
@@ -70,39 +73,67 @@ export default {
       shopsData: null
     };
   },
+  computed: {},
   created() {
-    Servive.getShops({ lat: this.lat, lng: this.lng }).then(res => {
-      this.shopsData = res.data;
-      console.log(this.shopsData);
-      // eslint-disable-next-line no-undef
-      var geolocation = new qq.maps.Geolocation(
-        'IAJBZ-TVJWX-PPD4B-74UEB-LGF2V-77B7Z',
-        'myapp'
-      );
-      geolocation.getLocation(
-        position => {
-          console.log('position:', position);
-          this.lat = position.lat;
-          this.lng = position.lng;
-          // 发送ajax请求，获取门店位置信息
-          Servive.getShops({ lat: this.lat, lng: this.lng }).then(res => {
-            this.shopsData = res.data;
-            console.log(this.shopsData);
-          });
-        },
-        err => {
-          console.log('定位失败', err);
-        }
-      );
-    }, {});
+    Indicator.open({
+      text: '定位加载中...',
+      spinnerType: 'fading-circle'
+    });
+    this.getLocation()
+      .then(() => {
+        Indicator.close();
+        this.searchShop();
+      })
+      .catch(() => {
+        Indicator.close();
+        this.searchShop();
+      });
   },
   components: {
     TopHead,
     MTab
   },
   methods: {
+    // 此方法只用于获取定位，
+    getLocation() {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line
+        var geolocation = new qq.maps.Geolocation(
+          'IAJBZ-TVJWX-PPD4B-74UEB-LGF2V-77B7Z',
+          'myapp'
+        );
+        geolocation.getLocation(
+          position => {
+            console.log('position:', position);
+            this.lat = position.lat;
+            this.lng = position.lng;
+            // 发送ajax请求，获取门店位置信息
+            resolve(position);
+            Indicator.close();
+          },
+          err => {
+            console.log('定位失败', err);
+            reject('定位失败');
+            Indicator.close();
+          }
+        );
+      });
+    },
+    // 改造：加载定位和加载后台数据分离，此方法只用来加载后台数据，定位完成后，加载后台数据
     searchShop() {
-      console.log(this.q);
+      Indicator.open({
+        text: '获取商铺信息中...',
+        spinnerType: 'fading-circle'
+      });
+      Servive.getShops({
+        lat: this.lat,
+        lng: this.lng,
+        q: this.q
+      }).then(res => {
+        this.shopsData = res.data;
+        console.log(this.shopsData);
+        Indicator.close();
+      });
     }
   },
   filters: {
@@ -147,7 +178,7 @@ export default {
     .shop-list {
       padding: 0 px2rem(28);
       background-color: #fff;
-      .shop-item {
+      .shop-item-link {
         display: flex;
         justify-content: space-between;
         border-bottom: px2rem(1) solid #ccc;

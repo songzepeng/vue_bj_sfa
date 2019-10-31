@@ -34,8 +34,14 @@ export default {
   //获取门店坐标
   getShops(data) {
     return axios.get(
-      `/api/auth/shop?_page=1&_limit=10&_order=asc&_sort=distance&Lng=${data.Lng}&Lat=${data.Lat}`
+      `/api/auth/shop?_page=1&_limit=20&_order=asc&_sort=distance&Lng=${
+        data.Lng
+      }&Lat=${data.Lat}&Lat=${data.lat}${data.q ? '&name_like=' + data.q : ''}`
     );
+  },
+  // 店内拜访数据
+  getShopInfo(id) {
+    return axios.get(`/api/auth/shopSales/${id}`);
   },
   getNotice(date, limit, isloadelater) {
     if (date) {

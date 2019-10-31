@@ -4,6 +4,7 @@ import router from './router';
 import store from './store';
 import VeeValidate from 'vee-validate';
 import helper from './lib/helper.js';
+import animated from 'animate.css';
 // console.log(VeeValidate);
 // import { required } from "vee-validate/dist/rules";
 
@@ -13,6 +14,7 @@ import './lib/hotcss.js';
 Vue.config.productionTip = false;
 // 一个轻量级的vue表单校验的插件
 Vue.use(VeeValidate);
+Vue.use(animated);
 
 router.beforeEach((to, from, next) => {
   console.log(store.getters.getLoginUser);
