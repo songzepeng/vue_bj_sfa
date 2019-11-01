@@ -27,6 +27,13 @@
       "unicode_decimal": 59093
     },
     {
+      "icon_id": "657545",
+      "name": "分期－销量排序",
+      "font_class": "xiaoliangpaixu",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
       "icon_id": "681206",
       "name": "圆点中",
       "font_class": "yuandianzhong",
@@ -41,11 +48,39 @@
       "unicode_decimal": 59055
     },
     {
+      "icon_id": "825146",
+      "name": "总销量",
+      "font_class": "zongxiaoliang",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "963842",
+      "name": "销售趋势",
+      "font_class": "xiaoshouqushi",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "4198403",
+      "name": "照相机",
+      "font_class": "zhaoxiangji",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
       "icon_id": "5809234",
       "name": "右箭头",
       "font_class": "youjiantou",
       "unicode": "e6a3",
       "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "6264966",
+      "name": "销量预测",
+      "font_class": "xiaoliangyuce",
+      "unicode": "e631",
+      "unicode_decimal": 58929
     },
     {
       "icon_id": "6308112",
@@ -90,6 +125,13 @@
       "unicode_decimal": 59221
     },
     {
+      "icon_id": "7761519",
+      "name": "删 除 ",
+      "font_class": "shanchu",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
       "icon_id": "7876854",
       "name": "user",
       "font_class": "user3",
@@ -97,11 +139,25 @@
       "unicode_decimal": 58886
     },
     {
+      "icon_id": "8081087",
+      "name": "删除",
+      "font_class": "shanchu1",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
       "icon_id": "8327184",
       "name": "user",
       "font_class": "user4",
       "unicode": "e60c",
       "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "9668108",
+      "name": "照相机",
+      "font_class": "camera",
+      "unicode": "e687",
+      "unicode_decimal": 59015
     },
     {
       "icon_id": "10331453",

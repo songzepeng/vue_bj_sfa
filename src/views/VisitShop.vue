@@ -62,6 +62,7 @@
 import TopHead from '../components/TopHead';
 import MTab from '../components/MTab';
 import Servive from '../service/index';
+import { mapMutations, mapState } from 'vuex';
 import { Indicator } from 'mint-ui';
 export default {
   name: 'VisitShop',
@@ -69,14 +70,16 @@ export default {
     return {
       q: '',
       lat: '',
-      lng: '',
-      shopsData: null
+      lng: ''
+      // shopsData: null
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(['shopsData'])
+  },
   created() {
     Indicator.open({
-      text: '定位加载中...',
+      text: '获取定位中...',
       spinnerType: 'fading-circle'
     });
     this.getLocation()
@@ -94,6 +97,7 @@ export default {
     MTab
   },
   methods: {
+    ...mapMutations(['initShops', 'appendShops']),
     // 此方法只用于获取定位，
     getLocation() {
       return new Promise((resolve, reject) => {
@@ -130,7 +134,8 @@ export default {
         lng: this.lng,
         q: this.q
       }).then(res => {
-        this.shopsData = res.data;
+        this.appendShops(res.data);
+        this.initShops(res.data);
         console.log(this.shopsData);
         Indicator.close();
       });

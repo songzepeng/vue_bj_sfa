@@ -7,6 +7,7 @@ import Notice from '../views/Notice.vue';
 import NoticeDetail from '../views/NoticeDetail.vue';
 import VisitShop from '../views/VisitShop.vue';
 import ShopInfo from '../views/ShopInfo.vue';
+import Signin from '../views/Signin.vue';
 
 Vue.use(VueRouter);
 
@@ -45,6 +46,11 @@ const routes = [
     path: '/visitshop/:id',
     name: 'ShopInfo',
     component: ShopInfo
+  },
+  {
+    path: '/shopsignin/:id',
+    name: 'signin',
+    component: Signin
   },
   {
     path: '/about',

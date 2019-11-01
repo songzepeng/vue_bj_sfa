@@ -43,6 +43,20 @@ export default {
   getShopInfo(id) {
     return axios.get(`/api/auth/shopSales/${id}`);
   },
+  // 上传图片到后台，添加
+  uploadImg(fromData) {
+    return axios({
+      url: '/api/upload',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      data: fromData
+    });
+  },
+  SubmitSigin(data) {
+    return axios.post('/api/auth/SignIn', data);
+  },
   getNotice(date, limit, isloadelater) {
     if (date) {
       date = date.getTime();

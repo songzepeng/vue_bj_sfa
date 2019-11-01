@@ -10,15 +10,15 @@ export default new Vuex.Store({
     LoginUser: sessionStorage.getItem('LoginUser') // 如果里面返回数据为真的时候，就把字符串转换过来
       ? JSON.parse(sessionStorage.getItem('LoginUser'))
       : null,
-    NoticeList: []
+    NoticeList: [],
+    shopsData: []
   },
   mutations: {
     initShops(state, payload) {
-      state.Shops = payload;
+      state.shopsData = payload;
     },
     appendShops(state, payload) {
-      state.Shops = _.uniqBy([state.Shops, ...payload], 'id');
-      state.Shops.push(...payload);
+      state.shopsData = _.uniqBy([...state.shopsData, ...payload], 'id');
     },
     initUser(state, payload) {
       state.LoginUser = payload;
