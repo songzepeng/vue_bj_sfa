@@ -18,7 +18,7 @@ module.exports = {
         ws: true,
         changeOrigin: true,
         pathRewrite: {
-          // bug 草， 这里的意思是，把/api替换成/mock/19982/api，我那边地址是两个api，所以报错404
+          // bug ， 这里的意思是，把/api替换成/mock/19982/api，我那边地址是两个api，所以报错404
           '^/api': '/api',
           '^/server': '/server'
         }
@@ -33,6 +33,6 @@ module.exports = {
     }
   }
   // dev: {
-  //   host: '192.168.0.166' // 原为: hotst: 'localhost'
+  //   host: '192.168.2.128' // 原为: hotst: 'localhost'
   // }
 };

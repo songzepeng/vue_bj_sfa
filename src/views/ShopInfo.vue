@@ -49,7 +49,7 @@
       ></textarea>
     </div>
     <div class="btn-wrap">
-      <div class="btn">
+      <div class="btn" @click="$router.push('/order/' + $route.params.id)">
         下单
       </div>
       <div class="btn act">

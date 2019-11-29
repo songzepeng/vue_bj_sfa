@@ -8,6 +8,7 @@ import NoticeDetail from '../views/NoticeDetail.vue';
 import VisitShop from '../views/VisitShop.vue';
 import ShopInfo from '../views/ShopInfo.vue';
 import Signin from '../views/Signin.vue';
+import Order from '../views/Order.vue';
 
 Vue.use(VueRouter);
 
@@ -51,6 +52,11 @@ const routes = [
     path: '/shopsignin/:id',
     name: 'signin',
     component: Signin
+  },
+  {
+    path: '/order/:id',
+    name: 'order',
+    component: Order
   },
   {
     path: '/about',
