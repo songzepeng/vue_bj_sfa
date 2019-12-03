@@ -57,8 +57,8 @@ export default {
   SubmitSigin(data) {
     return axios.post('/api/auth/SignIn', data);
   },
-  loadGoods() {
-    return axios.get('/api/auth/goods?_page=1&_limit=20');
+  loadGoods(data) {
+    return axios.get('/api/auth/goods', { params: data });
   },
   getNotice(date, limit, isloadelater) {
     if (date) {

@@ -9,8 +9,8 @@
     <!-- 中间导航区域 -->
     <div class="hot-wrap">
       <ul class="classify-list">
-        <li @click="isOnSalesClick">促销</li>
-        <li @click="isAll = true">全部</li>
+        <li :class="{ act: isOnSales }" @click="isOnSalesClick">促销</li>
+        <li :class="{ act: isAll }" @click="isSelectAll">全部</li>
         <li>SKU-N</li>
         <li>SKU-Y</li>
         <li>NIKE</li>
@@ -23,14 +23,22 @@
         <div class="fl count-wrap">{{ cur }} / {{ total }}</div>
         <div class="fr">
           <ul class="type-list-wrap">
-            <li>食品/</li>
-            <li>日化/</li>
-            <li>保洁/</li>
-            <li><i class="icon iconfont icon-filter"></i></li>
+            <li>{{ getFilterGoodsType }}/</li>
+            <li>
+              <i
+                class="icon iconfont icon-filter"
+                @click="showSelectGoodsType = true"
+              ></i>
+            </li>
           </ul>
         </div>
       </div>
-      <div class="goods-bd">
+      <div
+        class="goods-bd"
+        v-infinite-scroll="loadMore"
+        infinite-scroll-disabled="loading"
+        infinite-scroll-distance="10"
+      >
         <GoodsListItem
           v-for="item in goods"
           :goods="item"
@@ -38,48 +46,113 @@
         ></GoodsListItem>
       </div>
     </div>
+    <Popup v-model="showSelectGoodsType" pop-transition="popup-fade">
+      <div class="tanchuceng-class">
+        <Checklist
+          v-model="filterGoodsType"
+          :options="['食品', '日化', '保洁']"
+          title="请选择商品类型"
+        ></Checklist>
+        <Button
+          type="primary"
+          class="btn-select-type"
+          @click="showSelectGoodsType = false"
+          >确定</Button
+        >
+      </div>
+    </Popup>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
 import TopHead from '../components/TopHead';
 import SearchBtn from '../components/SearchBtn';
 import GoodsListItem from '../components/GoodListItem';
 import service from '../service/index';
+import { Popup, Checklist, Button, Toast, InfiniteScroll } from 'mint-ui';
+Vue.use(InfiniteScroll);
 export default {
   name: 'Order',
   data() {
     return {
+      showSelectGoodsType: false,
       q: '',
       isOnSales: false,
       isAll: true,
       total: 0,
       cur: 0,
-      goods: []
+      goods: [],
+      filterGoodsType: ['食品', '日化', '保洁'],
+      curPage: 1,
+      loading: false
     };
   },
   created() {
-    service
-      .loadGoods()
-      .then(res => {
-        this.goods = res.data;
-      })
-      .catch(() => {
-        console.log('error load goods!');
-      });
+    this.loadGoodsData();
+  },
+  computed: {
+    getFilterGoodsType() {
+      return this.filterGoodsType.join('/');
+    }
   },
   components: {
     TopHead,
     SearchBtn,
-    GoodsListItem
+    GoodsListItem,
+    Popup,
+    Checklist,
+    Button
   },
   methods: {
+    isSelectAll() {
+      this.isOnSales = false;
+      this.isAll = true;
+      // 清一下数据
+      this.goods = [];
+      this.loadGoodsData();
+    },
     isOnSalesClick() {
       this.isOnSales = !this.isOnSales;
       this.isAll = false;
+      // 清一下数据
+      this.goods = [];
+      this.loadGoodsData();
     },
     searchGoods() {
-      console.log('搜索', this.q);
+      // console.log('搜索', this.q);
+      this.curPage = 1;
+      this.goods = [];
+      this.loadGoodsData();
+    },
+    // 加载商品数据
+    loadGoodsData() {
+      let params = {
+        _limit: 20,
+        _page: this.curPage,
+        q: this.q
+      };
+      if (!this.isAll) {
+        params.onsales = this.isOnSales;
+      }
+      return service
+        .loadGoods(params)
+        .then(res => {
+          this.goods = [...this.goods, ...res.data];
+          this.total = res.headers['x-total-count'];
+          this.cur = this.total;
+        })
+        .catch(() => {
+          console.log('error load goods!');
+          Toast('加载数据失败！');
+        });
+    },
+    loadMore() {
+      this.loading = true;
+      this.curPage++;
+      this.loadGoodsData().finally(() => {
+        this.loading = false;
+      });
     }
   }
 };
@@ -113,6 +186,9 @@ export default {
       li:last-child {
         border-right: none;
       }
+      .act {
+        color: #04afeb;
+      }
     }
   }
   .goods-list-wrap {
@@ -128,13 +204,21 @@ export default {
       .type-list-wrap {
         display: flex;
         li {
-          flex: 0 0 px2rem(70);
+          flex: 0 0 px2rem(58px);
           i {
-            font-size: px2rem(32);
+            font-size: px2rem(28);
           }
         }
       }
     }
+  }
+  .tanchuceng-class {
+    width: 80%;
+    height: px2rem(300);
+    width: px2rem(200);
+    padding: px2rem(60);
+    text-align: center;
+    font-size: px2rem(50);
   }
 }
 .search-wrap {

@@ -11,11 +11,12 @@
       </div>
       <div class="price-wrap">
         <div class="fl">
-          价格：<span class="monery">{{ goods.monery }}</span>
+          价格：<span class="monery">{{ goods.monery }}元</span>
         </div>
         <div class="fr">
-          库存：<span>{{ goods.number }}箱</span
-          ><i class="icon iconfont icon-shuaxin"></i>
+          库存：<span>{{ goods.number }}箱</span>&nbsp;&nbsp;<i
+            class="icon iconfont icon-shuaxin"
+          ></i>
         </div>
       </div>
     </div>
